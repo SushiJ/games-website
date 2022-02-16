@@ -1,5 +1,6 @@
 import { Stack, AspectRatio, Img, Box } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
+import getInitialProps from "../lib/getInitialProps";
 import { Game } from "../types";
 
 function details(game: Game): JSX.Element {
@@ -13,8 +14,7 @@ function details(game: Game): JSX.Element {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`https://www.freetogame.com/api/games`);
-  const games = await res.json();
+  const games = await getInitialProps();
 
   const paths = games.map((game) => ({
     params: { id: game.id.toString() },
