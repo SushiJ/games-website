@@ -5,7 +5,13 @@ import { Games } from "./GameList";
 
 export const GameCard: React.FC<Games> = (game) => {
   return (
-    <Box m={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      m={2}
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      cursor={"pointer"}
+    >
       <Link href={`/${game.id}`}>
         <Image src={game.thumbnail} alt={game.title} />
       </Link>

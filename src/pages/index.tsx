@@ -1,31 +1,35 @@
 import { GetStaticProps } from "next";
 import { useEffect, useState } from "react";
-import GameList from "../components/GameList";
+import GameList, { Games } from "../components/GameList";
+import { Pagination } from "../components/Pagination";
 import getInitialProps from "../lib/getInitialProps";
 
-function Home({ games }: { games: Array<{}> }) {
-  const [gamesArr, setGamesArr] = useState([]);
-  const [page, setPage] = useState(0);
+function Home({ games }: { games: Games[] }) {
+  const [gamesArr, setGamesArr] = useState<Games[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [gamesPerPage] = useState<number>(20);
 
-  const ITEMS_PER_PAGE = 20;
+  useEffect(() => setGamesArr(games), []);
 
-  const result = gamesArr.slice(page, ITEMS_PER_PAGE);
+  //Get current games
+  const indexOfLastGame = currentPage * gamesPerPage;
+  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+  const currentGames = gamesArr.slice(indexOfFirstGame, indexOfLastGame);
 
-  const totalPageNumbers = Math.ceil(games.length / ITEMS_PER_PAGE);
-
-  useEffect(() => {
-    setGamesArr(games);
-  }, []);
+  //Change Page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   if (!gamesArr) return <div>Something went wrong</div>;
-
-  // const [page, setPage] = useState(0);
   return (
     <div>
-      <GameList games={result} />
-      <pre>{totalPageNumbers}</pre>
+      <GameList games={currentGames} />
+      {/* <pre>{totalPageNumbers}</pre> */}
       {/* <pre>{JSON.stringify(result, null, " ")}</pre> */}
-      <footer>{}</footer>
+      <Pagination
+        gamesPerPage={gamesPerPage}
+        totalGames={gamesArr.length}
+        paginate={paginate}
+      />
     </div>
   );
 }

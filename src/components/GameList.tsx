@@ -1,4 +1,4 @@
-import { Grid } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { GameCard } from "./GameCard";
 
 export interface Games {
@@ -18,7 +18,7 @@ export interface Games {
 const GameList = ({ games }): JSX.Element => {
   return (
     <Grid
-      my={6}
+      gap={4}
       templateColumns={[
         "repeat(1, 1fr)",
         "repeat(2, 1fr)",
@@ -27,7 +27,9 @@ const GameList = ({ games }): JSX.Element => {
       ]}
     >
       {games.map((game) => (
-        <GameCard key={game.id} {...game} />
+        <GridItem key={game.id}>
+          <GameCard {...game} />
+        </GridItem>
       ))}
     </Grid>
   );

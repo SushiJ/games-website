@@ -1,4 +1,4 @@
-import { Stack, AspectRatio, Img, Box } from "@chakra-ui/react";
+import { Stack, Img, Box } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import getInitialProps from "../lib/getInitialProps";
 import { Game } from "../types";
