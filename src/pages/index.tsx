@@ -1,44 +1,32 @@
-import { GetStaticProps } from "next";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import GameList, { Games } from "../components/GameList";
-import { Pagination } from "../components/Pagination";
-import getInitialProps from "../lib/getInitialProps";
+// import { fetchGames } from "../lib/getGames";
 
-function Home({ games }: { games: Games[] }) {
-  const [gamesArr, setGamesArr] = useState<Games[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [gamesPerPage] = useState<number>(20);
+function Home() {
+  const [data, setData] = useState<Array<Games>>([]);
 
-  useEffect(() => setGamesArr(games), []);
+  useEffect(() => {
+    async function fetchGames() {
+      let response = await fetch("/api/games");
+      const res = await response.json();
+      setData(res.games);
+    }
+    fetchGames();
+  }, []);
 
   //Get current games
-  const indexOfLastGame = currentPage * gamesPerPage;
-  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-  const currentGames = gamesArr.slice(indexOfFirstGame, indexOfLastGame);
-
-  //Change Page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  if (!gamesArr) return <div>Something went wrong</div>;
   return (
     <div>
-      <GameList games={currentGames} />
+      <div>
+        <Link href={{ pathname: "/", query: { page: 1 } }}>
+          <a>here</a>
+        </Link>
+      </div>
+      {/* <GameList games={currentGames} />
       {/* <pre>{totalPageNumbers}</pre> */}
-      {/* <pre>{JSON.stringify(result, null, " ")}</pre> */}
-      <Pagination
-        gamesPerPage={gamesPerPage}
-        totalGames={gamesArr.length}
-        paginate={paginate}
-      />
+      <pre>{JSON.stringify(data, null, " ")}</pre>
     </div>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const games = await getInitialProps();
-  return {
-    props: { games },
-  };
-};
-
 export default Home;
